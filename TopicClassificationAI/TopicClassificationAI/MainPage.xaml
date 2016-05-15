@@ -5,9 +5,22 @@
     xmlns:local="using:TopicClassificationAI"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+	xmlns:uc="using:TopicClassificationAI.UserControls"
     mc:Ignorable="d">
 
-    <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+	<StackPanel Margin="10">
+		<TextBlock Text="Enter the article here" Margin="50, 5"/>
 
-    </Grid>
+		<TextBox Name="articleBox" HorizontalAlignment="Stretch" Margin="10, 0"
+				 MinHeight="500"/>
+
+		<uc:TextProgressUserControl x:Name="articleProgress" Margin="5, 10" />
+
+		<Button Name="submitArticle" Content="Submit" HorizontalAlignment="Center"
+				Click="submitArticle_Click" Width="150"
+				Background="{ThemeResource SystemControlBackgroundAccentBrush}"
+				Foreground="{ThemeResource SystemControlForegroundBaseHighBrush}"/>
+
+		<TextBlock Name="topicsMatches" Margin="10" />
+	</StackPanel>
 </Page>
