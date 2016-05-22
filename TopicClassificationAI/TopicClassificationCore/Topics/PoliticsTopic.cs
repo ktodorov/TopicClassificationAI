@@ -20,5 +20,10 @@ namespace TopicClassificationCore.Topics
 		{
 			return true;
 		}
+
+		public override void LearnArticle(string article)
+		{
+			//throw new NotImplementedException();
+		}
 	}
 }

@@ -9,6 +9,9 @@
     mc:Ignorable="d">
 
 	<StackPanel Margin="10">
+		<Button Name="learnTopics" HorizontalAlignment="Right" Click="learnTopics_Click"
+				Content="Learn topics"/>
+
 		<TextBlock Text="Enter the article here" Margin="50, 5"/>
 
 		<TextBox Name="articleBox" HorizontalAlignment="Stretch" Margin="10, 0"

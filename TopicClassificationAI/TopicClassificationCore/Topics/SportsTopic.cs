@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using TopicClassificationCore.Helpers;
 
 namespace TopicClassificationCore.Topics
 {
@@ -19,6 +20,16 @@ namespace TopicClassificationCore.Topics
 		public override bool MatchesArticle(string article)
 		{
 			return true;
+		}
+
+		public override void LearnArticle(string article)
+		{
+			//var words = article.Split(' ');
+
+			//foreach(var word in words)
+			//{
+			//	Storage.AddWordOccurance(word, )
+			//}
 		}
 	}
 }

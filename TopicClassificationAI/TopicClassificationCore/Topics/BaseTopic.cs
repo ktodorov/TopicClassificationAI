@@ -14,5 +14,7 @@ namespace TopicClassificationCore.Topics
 		}
 
 		public abstract bool MatchesArticle(string article);
+
+		public abstract void LearnArticle(string article);
 	}
 }
