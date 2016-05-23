@@ -5,20 +5,28 @@
     xmlns:local="using:TopicClassificationAI.Pages"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+	xmlns:uc="using:TopicClassificationAI.UserControls"
     mc:Ignorable="d">
 
-	<StackPanel Orientation="Vertical">
-		<TextBlock Text="Enter the article here" Margin="50, 5"/>
+	<ScrollViewer VerticalScrollBarVisibility="Auto">
+		<StackPanel Orientation="Vertical" Margin="10">
+			<Button Content="Forget everything" Name="clearData" Click="clearData_Click" 
+				HorizontalAlignment="Right"/>
 
-		<TextBox Name="articleBox" HorizontalAlignment="Stretch" Margin="10, 0"
-				 MinHeight="500"/>
+			<TextBlock Text="Enter the article here" Margin="50, 5"/>
 
-		<ComboBox Name="topicsComboBox" HorizontalAlignment="Center" MinWidth="200" Margin="0, 15"
+			<TextBox Name="articleBox" HorizontalAlignment="Stretch" Margin="10, 0"
+				 MinHeight="500" TextWrapping="Wrap"/>
+
+			<ComboBox Name="topicsComboBox" HorizontalAlignment="Center" MinWidth="200" Margin="0, 15"
 				  ItemsSource="{x:Bind learningTopics}">
-		</ComboBox>
+			</ComboBox>
 
-		<Button Name="learnButton" Content="Learn article" Click="learnButton_Click" HorizontalAlignment="Center"
+			<uc:TextProgressUserControl x:Name="textProgress" />
+
+			<Button Name="learnButton" Content="Learn article" Click="learnButton_Click" HorizontalAlignment="Center"
 				Background="{ThemeResource SystemControlBackgroundAccentBrush}"
 				Foreground="{ThemeResource SystemControlForegroundBaseHighBrush}" />
-	</StackPanel>
+		</StackPanel>
+	</ScrollViewer>
 </Page>

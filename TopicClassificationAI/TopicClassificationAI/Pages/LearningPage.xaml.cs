@@ -17,6 +17,7 @@ using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
 using TopicClassificationCore.Extensions;
+using Windows.UI.Popups;
 
 // The Blank Page item template is documented at http://go.microsoft.com/fwlink/?LinkId=234238
 
@@ -67,11 +68,36 @@ namespace TopicClassificationAI.Pages
 
 		ObservableCollection<LearningTopic> learningTopics = new ObservableCollection<LearningTopic>();
 
-		private void learnButton_Click(object sender, RoutedEventArgs e)
+		private async void learnButton_Click(object sender, RoutedEventArgs e)
 		{
 			var topicSelected = (LearningTopic)topicsComboBox.SelectedValue;
 
-			Storage.StoreArticle(articleBox.Text, topicSelected.Topic);
+			textProgress.ProgressText = "Learning article";
+			textProgress.IsActive = true;
+
+			await Storage.StoreArticle(articleBox.Text, topicSelected.Topic);
+
+			textProgress.IsActive = false;
+		}
+
+		private async void clearData_Click(object sender, RoutedEventArgs e)
+		{
+			var message = "Are you sure you want to delete all learned topics?";
+			var title = "Please confirm";
+
+			var dialog = new MessageDialog(message, title);
+			dialog.Commands.Add(new UICommand("Yes") { Id = 0 });
+			dialog.Commands.Add(new UICommand("No") { Id = 1 });
+
+			dialog.DefaultCommandIndex = 0;
+			dialog.CancelCommandIndex = 1;
+
+			var result = await dialog.ShowAsync();
+
+			if (result.Id.ToString() == "0")
+			{
+				await Storage.ClearData();
+			}
 		}
 	}
 }

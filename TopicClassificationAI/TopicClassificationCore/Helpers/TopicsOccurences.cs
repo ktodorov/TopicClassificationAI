@@ -89,5 +89,27 @@ namespace TopicClassificationCore.Helpers
 
 			return maxTopic.Key;
 		}
+
+		public double GenerateTermFrequencyForWord(string word, ClassificationTopics topic, int newOccurences)
+		{
+			var allOccurences = Occurences[topic] + newOccurences;
+
+			var frequency = (double)newOccurences / allOccurences;
+
+			return frequency;
+		}
+
+		public double GenerateInverseDocumentFrequencyForWord(string word, ClassificationTopics topic)
+		{
+
+
+			return 0;
+		}
+
+		public double GenerateScoreForWord(string word, ClassificationTopics topic)
+		{
+
+			return 0;
+		}
 	}
 }

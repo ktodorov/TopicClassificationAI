@@ -1,26 +1,18 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Runtime.InteropServices.WindowsRuntime;
+﻿using DataAccessLayer.Contexts;
+using Microsoft.Data.Entity;
+using System;
 using Windows.ApplicationModel;
 using Windows.ApplicationModel.Activation;
-using Windows.Foundation;
-using Windows.Foundation.Collections;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
-using Windows.UI.Xaml.Controls.Primitives;
-using Windows.UI.Xaml.Data;
-using Windows.UI.Xaml.Input;
-using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
 
 namespace TopicClassificationAI
 {
-    /// <summary>
-    /// Provides application-specific behavior to supplement the default Application class.
-    /// </summary>
-    sealed partial class App : Application
+	/// <summary>
+	/// Provides application-specific behavior to supplement the default Application class.
+	/// </summary>
+	sealed partial class App : Application
     {
         /// <summary>
         /// Initializes the singleton application object.  This is the first line of authored code
@@ -33,6 +25,17 @@ namespace TopicClassificationAI
 				Microsoft.ApplicationInsights.WindowsCollectors.Session);
 			this.InitializeComponent();
             this.Suspending += OnSuspending;
+
+
+			// Before running the app for the first time, follow these steps:
+			// 1- Build -> Build the Project
+			// 2- Tools –> NuGet Package Manager –> Package Manager Console
+			// 3- Run "Add-Migration MyFirstMigration" to scaffold a migration to create the initial set of tables for your model
+			// See here for more information https://docs.efproject.net/en/latest/platforms/uwp/getting-started.html#create-your-database
+			using (var context = new TopicClassificationContext())
+			{
+				context.Database.Migrate();
+			}
         }
 
         /// <summary>

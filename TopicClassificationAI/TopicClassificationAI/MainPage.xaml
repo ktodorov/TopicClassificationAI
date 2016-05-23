@@ -15,7 +15,7 @@
 		<TextBlock Text="Enter the article here" Margin="50, 5"/>
 
 		<TextBox Name="articleBox" HorizontalAlignment="Stretch" Margin="10, 0"
-				 MinHeight="500"/>
+				 MinHeight="500" TextWrapping="Wrap"/>
 
 		<uc:TextProgressUserControl x:Name="articleProgress" Margin="5, 10" />
 
