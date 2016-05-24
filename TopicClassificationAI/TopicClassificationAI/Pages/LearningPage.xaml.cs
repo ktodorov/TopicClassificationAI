@@ -18,6 +18,7 @@ using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
 using TopicClassificationCore.Extensions;
 using Windows.UI.Popups;
+using System.Threading.Tasks;
 
 // The Blank Page item template is documented at http://go.microsoft.com/fwlink/?LinkId=234238
 
@@ -70,14 +71,22 @@ namespace TopicClassificationAI.Pages
 
 		private async void learnButton_Click(object sender, RoutedEventArgs e)
 		{
+			progressBar.Visibility = Visibility.Visible;
+			progressTextBlock.Visibility = Visibility.Visible;
+			learnButton.IsEnabled = false;
+
 			var topicSelected = (LearningTopic)topicsComboBox.SelectedValue;
+			var articleText = articleBox.Text;
 
-			textProgress.ProgressText = "Learning article";
-			textProgress.IsActive = true;
+			var progress = new Progress<double>(percent => progressBar.Value = percent);
 
-			await Storage.StoreArticle(articleBox.Text, topicSelected.Topic);
+			await Task.Delay(100);
+			await Storage.StoreArticle(articleText, topicSelected.Topic, progress);
 
-			textProgress.IsActive = false;
+			learnButton.IsEnabled = true;
+			progressBar.Visibility = Visibility.Collapsed;
+			progressTextBlock.Visibility = Visibility.Collapsed;
+			articleBox.Text = string.Empty;
 		}
 
 		private async void clearData_Click(object sender, RoutedEventArgs e)

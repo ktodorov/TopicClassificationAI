@@ -1,4 +1,6 @@
-﻿using System;
+﻿using DataAccessLayer.Contexts;
+using DataAccessLayer.Models;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -12,25 +14,21 @@ namespace TopicClassificationCore.Parsers
 	{
 		public override async Task Parse(string text)
 		{
-			var firstWord = text.Split(' ').FirstOrDefault();
+			var article = new Article();
+			article.Text = text;
 
-			var topic = Storage.FindWordTopic(firstWord);
+			using (var context = new TopicClassificationContext())
+			{
+				context.Articles.Add(article);
+				await context.SaveChangesAsync();
 
-			Topics.Add(topic);
+				var topic = await Storage.FindArticleTopic(context, article);
 
-			//await Task.Delay(new TimeSpan(0, 0, 3));
+				article.Topic = (int)topic;
+				await context.SaveChangesAsync();
 
-			//var politicsTopic = new PoliticsTopic();
-			//if (politicsTopic.MatchesArticle(text))
-			//{
-			//	Topics.Add(politicsTopic);
-			//}
-
-			//var sportsTopic = new SportsTopic();
-			//if (sportsTopic.MatchesArticle(text))
-			//{
-			//	Topics.Add(sportsTopic);
-			//}
+				Topics.Add(topic);
+			}
 		}
 	}
 }

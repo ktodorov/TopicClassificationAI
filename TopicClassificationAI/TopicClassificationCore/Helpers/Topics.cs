@@ -15,9 +15,4 @@ namespace TopicClassificationCore.Helpers
 		ScienceAndTechnology = 4,
 		Environment = 5
 	}
-
-
-	class Topics
-	{
-	}
 }

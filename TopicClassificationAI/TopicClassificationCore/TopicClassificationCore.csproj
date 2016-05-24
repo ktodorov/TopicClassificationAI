@@ -111,6 +111,7 @@
     <Compile Include="Helpers\Storage.cs" />
     <Compile Include="Helpers\Topics.cs" />
     <Compile Include="Helpers\TopicsOccurences.cs" />
+    <Compile Include="Helpers\TopicsRanklist.cs" />
     <Compile Include="Parsers\ArticleParser.cs" />
     <Compile Include="Parsers\BaseParser.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

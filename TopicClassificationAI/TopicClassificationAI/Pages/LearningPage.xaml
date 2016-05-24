@@ -8,7 +8,7 @@
 	xmlns:uc="using:TopicClassificationAI.UserControls"
     mc:Ignorable="d">
 
-	<ScrollViewer VerticalScrollBarVisibility="Auto">
+	<ScrollViewer VerticalScrollBarVisibility="Auto" Margin="0,3,0,-3">
 		<StackPanel Orientation="Vertical" Margin="10">
 			<Button Content="Forget everything" Name="clearData" Click="clearData_Click" 
 				HorizontalAlignment="Right"/>
@@ -22,7 +22,11 @@
 				  ItemsSource="{x:Bind learningTopics}">
 			</ComboBox>
 
-			<uc:TextProgressUserControl x:Name="textProgress" />
+			<ProgressBar Name="progressBar" Minimum="0" Maximum="100" HorizontalAlignment="Stretch" Visibility="Collapsed" 
+						 Margin="0, 15, 0, 5" />
+			
+			<TextBlock Name="progressTextBlock" Text="Learning..." Margin="0, 0, 0, 20" HorizontalAlignment="Center" TextAlignment="Center"
+					   Visibility="Collapsed"/>
 
 			<Button Name="learnButton" Content="Learn article" Click="learnButton_Click" HorizontalAlignment="Center"
 				Background="{ThemeResource SystemControlBackgroundAccentBrush}"

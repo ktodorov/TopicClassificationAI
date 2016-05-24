@@ -6,7 +6,7 @@ namespace DataAccessLayer.Contexts
 	public class TopicClassificationContext : DbContext
 	{
 		public DbSet<Word> Words { get; set; }
-		
+
 		public DbSet<Article> Articles { get; set; }
 
 		public DbSet<WordOccurence> WordOccurences { get; set; }

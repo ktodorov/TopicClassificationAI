@@ -1,4 +1,6 @@
-﻿using System;
+﻿using DataAccessLayer.Contexts;
+using DataAccessLayer.Models;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -6,110 +8,59 @@ using System.Threading.Tasks;
 
 namespace TopicClassificationCore.Helpers
 {
-	public class TopicsOccurences
+	public static class TopicsOccurences
 	{
-		Dictionary<ClassificationTopics, int> Occurences;
-
-		public TopicsOccurences()
+		public static TopicsRanklist GenerateTermFrequencyForWord(TopicClassificationContext context, Article dbArticle, Word word, List<WordOccurence> allWordOccurences)
 		{
-			Occurences = InitializeEmptyDictionary();
-		}
+			var ranklist = new TopicsRanklist();
 
-		public string Serialize()
-		{
-			var serializedBuilder = new StringBuilder();
-			foreach (var occurence in Occurences)
+			var articleIds = allWordOccurences.Select(wo => wo.ArticleId).Distinct().ToList();
+			foreach(var articleId in articleIds)
 			{
-				serializedBuilder.Append($"<%{(int)occurence.Key}&{occurence.Value}%>");
-			}
-
-			return serializedBuilder.ToString();
-		}
-
-		public void Deserialize(string serializedValue)
-		{
-			var values = serializedValue.Split(new string[] { "<%", "%>" }, StringSplitOptions.RemoveEmptyEntries);
-
-			foreach (var value in values)
-			{
-				var keyValuePair = value.Split(new string[] { "&" }, StringSplitOptions.RemoveEmptyEntries);
-
-				var topicString = keyValuePair[0];
-				var topic = 0;
-				if (!int.TryParse(topicString, out topic))
+				var article = context.Articles.FirstOrDefault(a => a.Id == articleId);
+				if (article != null)
 				{
-					continue;
+					allWordOccurences.Where(wo => wo.ArticleId == articleId).ToList().ForEach(wo => wo.Article = article);
 				}
-
-				var occurencesString = keyValuePair[1];
-				var occurences = 0;
-				if (!int.TryParse(occurencesString, out occurences))
-				{
-					continue;
-				}
-
-				SetOccurencesToDictionary((ClassificationTopics)topic, occurences);
 			}
-		}
+			var articles = allWordOccurences.Select(wo => wo.Article).Distinct().ToList();
 
-		public Dictionary<ClassificationTopics, int> InitializeEmptyDictionary()
-		{
-			var newDictionary = new Dictionary<ClassificationTopics, int>();
+			var score = 0.0;
 
-			var enumValues = Enum.GetValues(typeof(ClassificationTopics));
-
-			foreach (var enumValue in enumValues)
+			foreach (var article in articles)
 			{
-				newDictionary.Add((ClassificationTopics)enumValue, 0);
+				var wordOccurencesForCurrentArticle = allWordOccurences.Count(wo => wo.ArticleId == article.Id);
+				var occurencesCount = allWordOccurences.Where(wo => wo.Article.Topic == article.Topic).Count();
+				score = ((double)wordOccurencesForCurrentArticle) / occurencesCount;
+				ranklist.AddScore((ClassificationTopics)article.Topic, score);
 			}
 
-			return newDictionary;
+			return ranklist;
 		}
 
-		public void AddOccurenceToDictionary(ClassificationTopics topic)
+		public static double GenerateInverseDocumentFrequencyForWord(TopicClassificationContext context, Article dbArticle, Word word)
 		{
-			if (Occurences.ContainsKey(topic))
-			{
-				Occurences[topic] = Occurences[topic] + 1;
-			}
-			else
-			{
-				Occurences[topic] = 1;
-			}
+			var allWordOccurences = context.WordOccurences.Sum(wo => wo.TimesOccured);
+
+			var currentWordOccurences = context.WordOccurences.Where(wo => wo.WordId == word.Id).Sum(wo => wo.TimesOccured);
+
+			var division = (double)allWordOccurences / currentWordOccurences;
+
+			return Math.Log10(division);
 		}
 
-		public void SetOccurencesToDictionary(ClassificationTopics topic, int occurences)
+		public static TopicsRanklist GenerateScoreForWord(TopicsRanklist tfScore, double idfScore)
 		{
-			Occurences[topic] = occurences;
+			var multipliedRanklist = tfScore.MultiplyScores(idfScore);
+
+			return multipliedRanklist;
 		}
 
-		public ClassificationTopics GetWordTopic()
+		public static ClassificationTopics CalculateTopicByScore(TopicsRanklist score)
 		{
-			var maxTopic = Occurences.FirstOrDefault(t => t.Value == Occurences.Max(m => m.Value));
+			var topic = score.GetHighestRankedTopic();
 
-			return maxTopic.Key;
-		}
-
-		public double GenerateTermFrequencyForWord(string word, ClassificationTopics topic, int newOccurences)
-		{
-			var allOccurences = Occurences[topic] + newOccurences;
-
-			var frequency = (double)newOccurences / allOccurences;
-
-			return frequency;
-		}
-
-		public double GenerateInverseDocumentFrequencyForWord(string word, ClassificationTopics topic)
-		{
-
-
-			return 0;
-		}
-
-		public double GenerateScoreForWord(string word, ClassificationTopics topic)
-		{
-
-			return 0;
+			return topic;
 		}
 	}
 }

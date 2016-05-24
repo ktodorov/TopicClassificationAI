@@ -6,29 +6,13 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Windows.Storage;
+using Windows.UI.Xaml.Controls;
 
 namespace TopicClassificationCore.Helpers
 {
 	public static class Storage
 	{
-		//public static string GetValue(string value)
-		//{
-		//	if (ApplicationData.Current.LocalSettings.Values.ContainsKey(value))
-		//	{
-		//		return ApplicationData.Current.LocalSettings.Values[value].ToString();
-		//	}
-		//	else
-		//	{
-		//		return null;
-		//	}
-		//}
-
-		//public static void SetValue(string key, string value)
-		//{
-		//	ApplicationData.Current.LocalSettings.Values[key] = value;
-		//}
-
-		public static async Task StoreArticle(string text, ClassificationTopics topic)
+		public static async Task StoreArticle(string text, ClassificationTopics topic, IProgress<double> progress)
 		{
 			using (var context = new TopicClassificationContext())
 			{
@@ -39,11 +23,17 @@ namespace TopicClassificationCore.Helpers
 				context.Articles.Add(article);
 				await context.SaveChangesAsync();
 
-				var words = text.Split(' ');
+				var words = SplitTextByWords(text);
+
+				var i = 0.0;
+				var wordsCount = (double)words.Count;
 
 				foreach (var word in words)
 				{
+					await Task.Delay(1);
 					await AddWordOccurance(context, article.Id, word, topic);
+					i++;
+					progress.Report((i / wordsCount) * 100.0);
 				}
 
 			}
@@ -80,46 +70,47 @@ namespace TopicClassificationCore.Helpers
 			await context.SaveChangesAsync();
 		}
 
-		public static ClassificationTopics FindWordTopic(string word)
+		public static async Task<ClassificationTopics> FindArticleTopic(TopicClassificationContext context, Article article)
 		{
-			//var storedWord = GetValue(word);
+			var words = SplitTextByWords(article.Text);
 
-			//var occurences = new TopicsOccurences();
-			//if (!string.IsNullOrEmpty(storedWord))
-			//{
-			//	occurences.Deserialize(storedWord);
-			//}
-			//else
-			//{
-			//	throw new Exception("not recognized word");
-			//}
+			var articleScore = new TopicsRanklist();
 
-			//return occurences.GetWordTopic();
-
-			using (var context = new TopicClassificationContext())
+			foreach (var word in words)
 			{
-				var words = context.Words.ToList();
-
 				var wordEntity = context.Words.FirstOrDefault(w => w.Text == word);
 
 				if (wordEntity == null)
 				{
-					throw new Exception("Not recognized word");
+					wordEntity = new Word();
+					wordEntity.Text = word;
+					context.Words.Add(wordEntity);
+					await context.SaveChangesAsync();
 				}
 
 				var allWordOccurences = context.WordOccurences.Where(wo => wo.WordId == wordEntity.Id).ToList();
 
 				if (!allWordOccurences.Any())
 				{
-					throw new Exception("Not recognized word");
+					var wordOccurence = new WordOccurence();
+					wordOccurence.ArticleId = article.Id;
+					wordOccurence.WordId = wordEntity.Id;
+					wordOccurence.TimesOccured = 1;
+					context.WordOccurences.Add(wordOccurence);
+					await context.SaveChangesAsync();
+					continue;
 				}
 
-				var firstArticle = context.Articles.FirstOrDefault(a => a.Id == allWordOccurences.FirstOrDefault().ArticleId);
+				var tfScore = await Task.Run(() => TopicsOccurences.GenerateTermFrequencyForWord(context, article, wordEntity, allWordOccurences));
+				var idfScore = TopicsOccurences.GenerateInverseDocumentFrequencyForWord(context, article, wordEntity);
 
-				return (ClassificationTopics)firstArticle.Topic;
+				var score = TopicsOccurences.GenerateScoreForWord(tfScore, idfScore);
 
-				return ClassificationTopics.Arts;
+				articleScore.AddScores(score);
 			}
+
+			var topic = TopicsOccurences.CalculateTopicByScore(articleScore);
+			return topic;
 		}
 
 		public static async Task ClearData()
@@ -132,6 +123,11 @@ namespace TopicClassificationCore.Helpers
 			var topic = (ClassificationTopics)articleTopic;
 
 			return topic;
+		}
+
+		public static List<string> SplitTextByWords(string text)
+		{
+			return text.Split(' ').ToList();
 		}
 	}
 }

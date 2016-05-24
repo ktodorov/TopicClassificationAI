@@ -8,22 +8,24 @@
 	xmlns:uc="using:TopicClassificationAI.UserControls"
     mc:Ignorable="d">
 
-	<StackPanel Margin="10">
-		<Button Name="learnTopics" HorizontalAlignment="Right" Click="learnTopics_Click"
+	<ScrollViewer VerticalScrollBarVisibility="Auto">
+		<StackPanel Margin="10">
+			<Button Name="learnTopics" HorizontalAlignment="Right" Click="learnTopics_Click"
 				Content="Learn topics"/>
 
-		<TextBlock Text="Enter the article here" Margin="50, 5"/>
+			<TextBlock Text="Enter the article here" Margin="50, 5"/>
 
-		<TextBox Name="articleBox" HorizontalAlignment="Stretch" Margin="10, 0"
+			<TextBox Name="articleBox" HorizontalAlignment="Stretch" Margin="10, 0"
 				 MinHeight="500" TextWrapping="Wrap"/>
 
-		<uc:TextProgressUserControl x:Name="articleProgress" Margin="5, 10" />
+			<uc:TextProgressUserControl x:Name="articleProgress" Margin="5, 10" />
 
-		<Button Name="submitArticle" Content="Submit" HorizontalAlignment="Center"
+			<Button Name="submitArticle" Content="Submit" HorizontalAlignment="Center"
 				Click="submitArticle_Click" Width="150"
 				Background="{ThemeResource SystemControlBackgroundAccentBrush}"
 				Foreground="{ThemeResource SystemControlForegroundBaseHighBrush}"/>
 
-		<TextBlock Name="topicsMatches" Margin="10" />
-	</StackPanel>
+			<TextBlock Name="topicsMatches" Margin="10" />
+		</StackPanel>
+	</ScrollViewer>
 </Page>
