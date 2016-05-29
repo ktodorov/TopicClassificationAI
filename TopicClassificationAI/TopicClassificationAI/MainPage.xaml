@@ -10,22 +10,36 @@
 
 	<ScrollViewer VerticalScrollBarVisibility="Auto">
 		<StackPanel Margin="10">
+			<StackPanel.ChildrenTransitions>
+				<TransitionCollection>
+					<EntranceThemeTransition />
+				</TransitionCollection>
+			</StackPanel.ChildrenTransitions>
+			
 			<Button Name="learnTopics" HorizontalAlignment="Right" Click="learnTopics_Click"
 				Content="Learn topics"/>
 
 			<TextBlock Text="Enter the article here" Margin="50, 5"/>
 
 			<TextBox Name="articleBox" HorizontalAlignment="Stretch" Margin="10, 0"
-				 MinHeight="500" TextWrapping="Wrap"/>
+				 MinHeight="100" TextWrapping="Wrap"/>
 
-			<uc:TextProgressUserControl x:Name="articleProgress" Margin="5, 10" />
+			<ProgressBar Name="progressBar" Minimum="0" Maximum="100" HorizontalAlignment="Stretch" Visibility="Collapsed" 
+						 Margin="0, 15, 0, 5" />
+
+			<TextBlock Name="progressTextBlock" Text="Calculating..." Margin="0, 0, 0, 20" HorizontalAlignment="Center" TextAlignment="Center"
+					   Visibility="Collapsed"/>
 
 			<Button Name="submitArticle" Content="Submit" HorizontalAlignment="Center"
-				Click="submitArticle_Click" Width="150"
+				Click="submitArticle_Click" Width="150" Margin="0, 10"
 				Background="{ThemeResource SystemControlBackgroundAccentBrush}"
 				Foreground="{ThemeResource SystemControlForegroundBaseHighBrush}"/>
 
-			<TextBlock Name="topicsMatches" Margin="10" />
+			<TextBlock Name="topicsMatchesHeader" Margin="10" Foreground="{ThemeResource SystemControlBackgroundBaseHighBrush}"
+					   Visibility="Collapsed">
+				Based on the text, the article matches the following categories:
+			</TextBlock>
+			<TextBlock Name="topicsMatches" Margin="20, 0" Foreground="{ThemeResource SystemControlForegroundAccentBrush}"/>
 		</StackPanel>
 	</ScrollViewer>
 </Page>

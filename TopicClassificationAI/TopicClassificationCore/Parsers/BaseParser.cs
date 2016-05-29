@@ -12,6 +12,6 @@ namespace TopicClassificationCore.Parsers
 	{
 		public List<ClassificationTopics> Topics = new List<ClassificationTopics>();
 
-		public abstract Task Parse(string text);
+		public abstract Task Parse(string text, IProgress<double> progress = null);
 	}
 }

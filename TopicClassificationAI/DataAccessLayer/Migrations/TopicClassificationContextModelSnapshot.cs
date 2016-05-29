@@ -23,6 +23,16 @@ namespace DataAccessLayer.Migrations
                     b.Property<string>("Text")
                         .IsRequired();
 
+                    b.HasKey("Id");
+                });
+
+            modelBuilder.Entity("DataAccessLayer.Models.ArticleTopic", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<int>("ArticleId");
+
                     b.Property<int>("Topic");
 
                     b.HasKey("Id");
@@ -51,6 +61,13 @@ namespace DataAccessLayer.Migrations
                     b.Property<int>("WordId");
 
                     b.HasKey("Id");
+                });
+
+            modelBuilder.Entity("DataAccessLayer.Models.ArticleTopic", b =>
+                {
+                    b.HasOne("DataAccessLayer.Models.Article")
+                        .WithMany()
+                        .HasForeignKey("ArticleId");
                 });
 
             modelBuilder.Entity("DataAccessLayer.Models.WordOccurence", b =>

@@ -47,6 +47,11 @@ namespace TopicClassificationCore.Helpers
 
 		public void AddScores(TopicsRanklist ranklistToAdd)
 		{
+			if (ranklistToAdd == null)
+			{
+				return;
+			}
+
 			foreach(var element in ranklistToAdd.Ranklist)
 			{
 				AddScore(element.Key, element.Value);
@@ -56,6 +61,21 @@ namespace TopicClassificationCore.Helpers
 		public ClassificationTopics GetHighestRankedTopic()
 		{
 			return rankList.FirstOrDefault(r => r.Value == rankList.Max(rm => rm.Value)).Key;
+		}
+
+		public List<ClassificationTopics> GetSubtopics()
+		{
+
+			var topTopic = this.GetHighestRankedTopic();
+
+			// Score required for the category to match the article ( 85% from the top score )
+			var requiredScore = rankList[topTopic] * 0.85;
+
+			var filteredTopics = rankList.Where(r => r.Key != topTopic && r.Value >= requiredScore);
+
+			var filteredTopicsNames = filteredTopics.Select(r => r.Key).ToList();
+
+			return filteredTopicsNames;
 		}
 	}
 }

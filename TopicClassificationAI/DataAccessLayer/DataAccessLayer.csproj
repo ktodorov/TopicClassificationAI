@@ -108,12 +108,13 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Contexts\TopicClassificationContext.cs" />
-    <Compile Include="Migrations\20160523175845_InitialCreate.cs" />
-    <Compile Include="Migrations\20160523175845_InitialCreate.designer.cs">
-      <DependentUpon>20160523175845_InitialCreate.cs</DependentUpon>
+    <Compile Include="Migrations\20160529161423_InitialCreate.cs" />
+    <Compile Include="Migrations\20160529161423_InitialCreate.designer.cs">
+      <DependentUpon>20160529161423_InitialCreate.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\TopicClassificationContextModelSnapshot.cs" />
     <Compile Include="Models\Article.cs" />
+    <Compile Include="Models\ArticleTopic.cs" />
     <Compile Include="Models\EntityBase.cs" />
     <Compile Include="Models\Word.cs" />
     <Compile Include="Models\WordOccurence.cs" />

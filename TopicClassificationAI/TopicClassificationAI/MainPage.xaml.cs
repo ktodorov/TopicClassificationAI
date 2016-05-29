@@ -7,6 +7,7 @@ using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
 using System.Threading.Tasks;
 using TopicClassificationAI.Pages;
+using TopicClassificationCore.Exceptions;
 using TopicClassificationCore.Extensions;
 using TopicClassificationCore.Parsers;
 using Windows.Foundation;
@@ -38,22 +39,38 @@ namespace TopicClassificationAI
 
 		private async void submitArticle_Click(object sender, RoutedEventArgs e)
 		{
-			articleProgress.IsActive = true;
-			articleProgress.ProgressText = "Calculating...";
+			topicsMatches.Text = string.Empty;
+
+			var articleText = articleBox.Text;
+
+			if (string.IsNullOrEmpty(articleText))
+			{
+				throw new TopicValidationException("Please enter text for the article");
+			}
+
+			progressBar.Visibility = Visibility.Visible;
+			progressTextBlock.Visibility = Visibility.Visible;
+
 			articleBox.IsEnabled = false;
 			submitArticle.IsEnabled = false;
 
+			var progress = new Progress<double>(percent => progressBar.Value = percent);
+
 			var parser = new ArticleParser();
-			await parser.Parse(articleBox.Text);
+			await Task.Delay(100);
+			await parser.Parse(articleText, progress);
 
 			foreach (var topic in parser.Topics)
 			{
 				topicsMatches.Text += $" - {topic.ToString().SeparateCamelCase()}\n";
 			}
 
+			topicsMatchesHeader.Visibility = Visibility.Visible;
+			progressBar.Visibility = Visibility.Collapsed;
+			progressTextBlock.Visibility = Visibility.Collapsed;
+
 			submitArticle.IsEnabled = true;
 			articleBox.IsEnabled = true;
-			articleProgress.IsActive = false;
 		}
 
 		private void learnTopics_Click(object sender, RoutedEventArgs e)

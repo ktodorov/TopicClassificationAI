@@ -8,7 +8,7 @@ using DataAccessLayer.Contexts;
 namespace DataAccessLayer.Migrations
 {
     [DbContext(typeof(TopicClassificationContext))]
-    [Migration("20160523175845_InitialCreate")]
+    [Migration("20160529161423_InitialCreate")]
     partial class InitialCreate
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -23,6 +23,16 @@ namespace DataAccessLayer.Migrations
 
                     b.Property<string>("Text")
                         .IsRequired();
+
+                    b.HasKey("Id");
+                });
+
+            modelBuilder.Entity("DataAccessLayer.Models.ArticleTopic", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<int>("ArticleId");
 
                     b.Property<int>("Topic");
 
@@ -52,6 +62,13 @@ namespace DataAccessLayer.Migrations
                     b.Property<int>("WordId");
 
                     b.HasKey("Id");
+                });
+
+            modelBuilder.Entity("DataAccessLayer.Models.ArticleTopic", b =>
+                {
+                    b.HasOne("DataAccessLayer.Models.Article")
+                        .WithMany()
+                        .HasForeignKey("ArticleId");
                 });
 
             modelBuilder.Entity("DataAccessLayer.Models.WordOccurence", b =>

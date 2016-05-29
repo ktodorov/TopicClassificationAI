@@ -14,7 +14,7 @@ namespace TopicClassificationCore.Helpers
 		{
 			var ranklist = new TopicsRanklist();
 
-			var articleIds = allWordOccurences.Select(wo => wo.ArticleId).Distinct().ToList();
+			var articleIds = allWordOccurences.Select(wo => wo.ArticleId).Where(id => id != dbArticle.Id).Distinct().ToList();
 			foreach(var articleId in articleIds)
 			{
 				var article = context.Articles.FirstOrDefault(a => a.Id == articleId);
@@ -23,16 +23,22 @@ namespace TopicClassificationCore.Helpers
 					allWordOccurences.Where(wo => wo.ArticleId == articleId).ToList().ForEach(wo => wo.Article = article);
 				}
 			}
-			var articles = allWordOccurences.Select(wo => wo.Article).Distinct().ToList();
+			var articles = allWordOccurences.Select(wo => wo.Article).Where(a => a != dbArticle && a != null).Distinct().ToList();
 
 			var score = 0.0;
 
 			foreach (var article in articles)
 			{
 				var wordOccurencesForCurrentArticle = allWordOccurences.Count(wo => wo.ArticleId == article.Id);
-				var occurencesCount = allWordOccurences.Where(wo => wo.Article.Topic == article.Topic).Count();
-				score = ((double)wordOccurencesForCurrentArticle) / occurencesCount;
-				ranklist.AddScore((ClassificationTopics)article.Topic, score);
+
+				var articleTopics = article.GetTopics(context).Select(at => at.Topic);
+
+				foreach (var topic in articleTopics)
+				{
+					var occurencesCount = allWordOccurences.Where(wo => wo.Article.GetTopics(context).Select(at => at.Topic).Contains(topic)).Count();
+					score = ((double)wordOccurencesForCurrentArticle) / occurencesCount;
+					ranklist.AddScore((ClassificationTopics)topic, score);
+				}
 			}
 
 			return ranklist;
@@ -56,11 +62,20 @@ namespace TopicClassificationCore.Helpers
 			return multipliedRanklist;
 		}
 
-		public static ClassificationTopics CalculateTopicByScore(TopicsRanklist score)
+		public static List<ClassificationTopics> CalculateTopicsByScore(TopicsRanklist score)
 		{
 			var topic = score.GetHighestRankedTopic();
 
-			return topic;
+			var calculatedTopics = new List<ClassificationTopics>();
+			calculatedTopics.Add(topic);
+
+			var subtopics = score.GetSubtopics();
+			if (subtopics.Any())
+			{
+				calculatedTopics.AddRange(subtopics);
+			}
+
+			return calculatedTopics;
 		}
 	}
 }

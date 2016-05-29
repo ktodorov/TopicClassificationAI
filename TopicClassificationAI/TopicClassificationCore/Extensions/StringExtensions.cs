@@ -14,9 +14,10 @@ namespace TopicClassificationCore.Extensions
 
 			var resultArray = new List<char>();
 
+			var i = 0;
 			foreach (var symbol in array)
 			{
-				if (char.IsUpper(symbol) && array.IndexOf(symbol) != 0)
+				if (char.IsUpper(symbol) && i != 0)
 				{
 					resultArray.Add(' ');
 					resultArray.Add(char.ToLower(symbol));
@@ -25,11 +26,29 @@ namespace TopicClassificationCore.Extensions
 				{
 					resultArray.Add(symbol);
 				}
+				i++;
 			}
 
 			var result = string.Join("", resultArray.ToArray());
 
 			return result;
+		}
+
+		public static string RemoveSpecialSymbols(this string text)
+		{
+			var filteredText = text.Replace(new char[] { ',', '.', '"', '*', '\r', '\n', '-', '_', '!', '?', '\"', '(', ')', '<', '>' }, " ");
+
+			filteredText = filteredText.Replace(Environment.NewLine, " ");
+
+			return filteredText;
+		}
+
+		public static string Replace(this string text, char[] separators, string newVal)
+		{
+			string[] temp;
+
+			temp = text.Split(separators, StringSplitOptions.RemoveEmptyEntries);
+			return String.Join(newVal, temp);
 		}
 	}
 }

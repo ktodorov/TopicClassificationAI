@@ -12,7 +12,7 @@ namespace TopicClassificationCore.Parsers
 {
 	public class ArticleParser : BaseParser
 	{
-		public override async Task Parse(string text)
+		public override async Task Parse(string text, IProgress<double> progress = null)
 		{
 			var article = new Article();
 			article.Text = text;
@@ -22,12 +22,19 @@ namespace TopicClassificationCore.Parsers
 				context.Articles.Add(article);
 				await context.SaveChangesAsync();
 
-				var topic = await Storage.FindArticleTopic(context, article);
+				var topics = await Storage.FindArticleTopic(context, article, progress);
 
-				article.Topic = (int)topic;
+				foreach (var topic in topics)
+				{
+					var articleTopic = new ArticleTopic();
+					articleTopic.ArticleId = article.Id;
+					articleTopic.Topic = (int)topic;
+					context.ArticleTopics.Add(articleTopic);
+				}
+
 				await context.SaveChangesAsync();
 
-				Topics.Add(topic);
+				Topics.AddRange(topics);
 			}
 		}
 	}

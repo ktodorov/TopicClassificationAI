@@ -11,7 +11,7 @@ namespace TopicClassificationCore.Helpers
 		Business = 0,
 		Politics = 1,
 		Sports = 2,
-		Arts = 3,
+		ArtsAndEntertainment = 3,
 		ScienceAndTechnology = 4,
 		Environment = 5
 	}

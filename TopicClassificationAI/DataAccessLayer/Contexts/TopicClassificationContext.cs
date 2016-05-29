@@ -11,6 +11,8 @@ namespace DataAccessLayer.Contexts
 
 		public DbSet<WordOccurence> WordOccurences { get; set; }
 
+		public DbSet<ArticleTopic> ArticleTopics { get; set; }
+
 		protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
 		{
 			optionsBuilder.UseSqlite("Filename=TopicClassifications.db");

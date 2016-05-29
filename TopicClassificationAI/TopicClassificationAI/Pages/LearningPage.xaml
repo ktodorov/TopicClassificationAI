@@ -10,25 +10,29 @@
 
 	<ScrollViewer VerticalScrollBarVisibility="Auto" Margin="0,3,0,-3">
 		<StackPanel Orientation="Vertical" Margin="10">
-			<Button Content="Forget everything" Name="clearData" Click="clearData_Click" 
-				HorizontalAlignment="Right"/>
+			<StackPanel.ChildrenTransitions>
+				<TransitionCollection>
+					<EntranceThemeTransition />
+				</TransitionCollection>
+			</StackPanel.ChildrenTransitions>
 
 			<TextBlock Text="Enter the article here" Margin="50, 5"/>
 
 			<TextBox Name="articleBox" HorizontalAlignment="Stretch" Margin="10, 0"
-				 MinHeight="500" TextWrapping="Wrap"/>
+				 MinHeight="100" TextWrapping="Wrap"/>
 
-			<ComboBox Name="topicsComboBox" HorizontalAlignment="Center" MinWidth="200" Margin="0, 15"
-				  ItemsSource="{x:Bind learningTopics}">
-			</ComboBox>
+			<ListView Name="topicsListView" HorizontalAlignment="Center" MinWidth="200" Margin="0, 15"
+				  ItemsSource="{x:Bind learningTopics}" SelectionMode="Multiple">
+			</ListView>
 
 			<ProgressBar Name="progressBar" Minimum="0" Maximum="100" HorizontalAlignment="Stretch" Visibility="Collapsed" 
 						 Margin="0, 15, 0, 5" />
-			
+
 			<TextBlock Name="progressTextBlock" Text="Learning..." Margin="0, 0, 0, 20" HorizontalAlignment="Center" TextAlignment="Center"
 					   Visibility="Collapsed"/>
 
 			<Button Name="learnButton" Content="Learn article" Click="learnButton_Click" HorizontalAlignment="Center"
+					Width="150" Margin="0, 10"
 				Background="{ThemeResource SystemControlBackgroundAccentBrush}"
 				Foreground="{ThemeResource SystemControlForegroundBaseHighBrush}" />
 		</StackPanel>

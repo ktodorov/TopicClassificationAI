@@ -14,8 +14,7 @@ namespace DataAccessLayer.Migrations
                 {
                     Id = table.Column<int>(nullable: false)
                         .Annotation("Sqlite:Autoincrement", true),
-                    Text = table.Column<string>(nullable: false),
-                    Topic = table.Column<int>(nullable: false)
+                    Text = table.Column<string>(nullable: false)
                 },
                 constraints: table =>
                 {
@@ -32,6 +31,25 @@ namespace DataAccessLayer.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Word", x => x.Id);
+                });
+            migrationBuilder.CreateTable(
+                name: "ArticleTopic",
+                columns: table => new
+                {
+                    Id = table.Column<int>(nullable: false)
+                        .Annotation("Sqlite:Autoincrement", true),
+                    ArticleId = table.Column<int>(nullable: false),
+                    Topic = table.Column<int>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_ArticleTopic", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_ArticleTopic_Article_ArticleId",
+                        column: x => x.ArticleId,
+                        principalTable: "Article",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                 });
             migrationBuilder.CreateTable(
                 name: "WordOccurence",
@@ -63,6 +81,7 @@ namespace DataAccessLayer.Migrations
 
         protected override void Down(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.DropTable("ArticleTopic");
             migrationBuilder.DropTable("WordOccurence");
             migrationBuilder.DropTable("Article");
             migrationBuilder.DropTable("Word");
