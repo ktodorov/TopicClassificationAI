@@ -8,8 +8,8 @@
 	xmlns:uc="using:TopicClassificationAI.UserControls"
     mc:Ignorable="d">
 
-	<ScrollViewer VerticalScrollBarVisibility="Auto" Margin="0,3,0,-3">
-		<StackPanel Orientation="Vertical" Margin="10">
+	<ScrollViewer VerticalScrollBarVisibility="Auto" VerticalAlignment="Stretch">
+		<StackPanel Orientation="Vertical" Margin="10" VerticalAlignment="Center">
 			<StackPanel.ChildrenTransitions>
 				<TransitionCollection>
 					<EntranceThemeTransition />
@@ -33,8 +33,9 @@
 
 			<Button Name="learnButton" Content="Learn article" Click="learnButton_Click" HorizontalAlignment="Center"
 					Width="150" Margin="0, 10"
-				Background="{ThemeResource SystemControlBackgroundAccentBrush}"
-				Foreground="{ThemeResource SystemControlForegroundBaseHighBrush}" />
+					Background="{ThemeResource SystemControlBackgroundAccentBrush}"
+					Foreground="White"
+					FontWeight="Bold" Padding="10" />
 		</StackPanel>
 	</ScrollViewer>
 </Page>

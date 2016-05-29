@@ -10,9 +10,12 @@ using TopicClassificationAI.Pages;
 using TopicClassificationCore.Exceptions;
 using TopicClassificationCore.Extensions;
 using TopicClassificationCore.Parsers;
+using Windows.ApplicationModel.Core;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
+using Windows.UI;
 using Windows.UI.Core;
+using Windows.UI.ViewManagement;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Controls.Primitives;
@@ -35,6 +38,26 @@ namespace TopicClassificationAI
 			this.InitializeComponent();
 
 			SystemNavigationManager.GetForCurrentView().AppViewBackButtonVisibility = AppViewBackButtonVisibility.Collapsed;
+
+			var backgroundBrushName = "ApplicationPageBackgroundThemeBrush";
+			var backgroundBrush = new SolidColorBrush();
+			if (Application.Current.Resources.ContainsKey(backgroundBrushName))
+			{
+				backgroundBrush = new SolidColorBrush((Application.Current.Resources[backgroundBrushName] as SolidColorBrush).Color);
+			}
+
+			var foregroundBrushName = "SystemControlForegroundAccentBrush";
+			var foregroundBrush = new SolidColorBrush();
+			if (Application.Current.Resources.ContainsKey(foregroundBrushName))
+			{
+				foregroundBrush = new SolidColorBrush((Application.Current.Resources[foregroundBrushName] as SolidColorBrush).Color);
+			}
+
+			var appTitleBar = ApplicationView.GetForCurrentView().TitleBar;
+			appTitleBar.BackgroundColor = backgroundBrush.Color;
+			appTitleBar.ForegroundColor = foregroundBrush.Color;
+			appTitleBar.ButtonBackgroundColor = backgroundBrush.Color;
+			appTitleBar.ButtonForegroundColor = foregroundBrush.Color;
 		}
 
 		private async void submitArticle_Click(object sender, RoutedEventArgs e)

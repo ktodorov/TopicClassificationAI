@@ -8,8 +8,8 @@
 	xmlns:uc="using:TopicClassificationAI.UserControls"
     mc:Ignorable="d">
 
-	<ScrollViewer VerticalScrollBarVisibility="Auto">
-		<StackPanel Margin="10">
+	<ScrollViewer VerticalScrollBarVisibility="Auto" VerticalAlignment="Stretch">
+		<StackPanel Margin="10" VerticalAlignment="Center">
 			<StackPanel.ChildrenTransitions>
 				<TransitionCollection>
 					<EntranceThemeTransition />
@@ -17,7 +17,7 @@
 			</StackPanel.ChildrenTransitions>
 			
 			<Button Name="learnTopics" HorizontalAlignment="Right" Click="learnTopics_Click"
-				Content="Learn topics"/>
+				Content="Learn topics" Padding="10"/>
 
 			<TextBlock Text="Enter the article here" Margin="50, 5"/>
 
@@ -31,9 +31,10 @@
 					   Visibility="Collapsed"/>
 
 			<Button Name="submitArticle" Content="Submit" HorizontalAlignment="Center"
-				Click="submitArticle_Click" Width="150" Margin="0, 10"
-				Background="{ThemeResource SystemControlBackgroundAccentBrush}"
-				Foreground="{ThemeResource SystemControlForegroundBaseHighBrush}"/>
+					Click="submitArticle_Click" Width="150" Margin="0, 10"
+					Background="{ThemeResource SystemControlBackgroundAccentBrush}"
+					Foreground="White"
+					FontWeight="Bold" Padding="10"/>
 
 			<TextBlock Name="topicsMatchesHeader" Margin="10" Foreground="{ThemeResource SystemControlBackgroundBaseHighBrush}"
 					   Visibility="Collapsed">
