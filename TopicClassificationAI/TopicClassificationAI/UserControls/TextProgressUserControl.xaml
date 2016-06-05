@@ -6,8 +6,12 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d">
-	<StackPanel Orientation="Horizontal">
-		<ProgressRing Name="mainProgress" IsActive="False" />
-		<TextBlock Name="progressText" Visibility="Collapsed" Margin="5, 0" />
+	<StackPanel Orientation="Vertical"
+				HorizontalAlignment="Stretch">
+		<ProgressBar Name="progressBar" Minimum="0" Maximum="100" HorizontalAlignment="Stretch" Visibility="Collapsed" 
+						 Margin="0, 15, 0, 5"/>
+
+		<TextBlock Name="progressTextBlock" Margin="0, 0, 0, 20" HorizontalAlignment="Center" TextAlignment="Center"
+					   Visibility="Collapsed" Foreground="{ThemeResource SystemControlForegroundBaseHighBrush}"/>
 	</StackPanel>
 </UserControl>

@@ -90,21 +90,21 @@ namespace TopicClassificationAI.Pages
 				throw new TopicValidationException("Please select one or more topics for the article");
 			}
 
-			progressBar.Visibility = Visibility.Visible;
-			progressTextBlock.Visibility = Visibility.Visible;
+			textProgress.IsActive = true;
 			learnButton.IsEnabled = false;
+			learnButton.Visibility = Visibility.Collapsed;
 			topicsListView.IsEnabled = false;
 			articleBox.IsEnabled = false;
 			SystemNavigationManager.GetForCurrentView().AppViewBackButtonVisibility = AppViewBackButtonVisibility.Collapsed;
 
-			var progress = new Progress<double>(percent => progressBar.Value = percent);
+			var progress = new Progress<double>(percent => textProgress.UpdateProgress(percent));
 
 			await Task.Delay(100);
 			await Storage.StoreArticle(articleText, topicsSelected.Select(t => t.Topic).ToList(), progress);
 
 			learnButton.IsEnabled = true;
-			progressBar.Visibility = Visibility.Collapsed;
-			progressTextBlock.Visibility = Visibility.Collapsed;
+			learnButton.Visibility = Visibility.Visible;
+			textProgress.IsActive = false;
 			topicsListView.IsEnabled = true;
 			articleBox.IsEnabled = true;
 			articleBox.Text = string.Empty;

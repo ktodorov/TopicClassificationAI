@@ -13,30 +13,19 @@ namespace TopicClassificationCore.Helpers
 		public static TopicsRanklist GenerateTermFrequencyForWord(TopicClassificationContext context, Article dbArticle, Word word, List<WordOccurence> allWordOccurences)
 		{
 			var ranklist = new TopicsRanklist();
-
-			var articleIds = allWordOccurences.Select(wo => wo.ArticleId).Where(id => id != dbArticle.Id).Distinct().ToList();
-			foreach(var articleId in articleIds)
-			{
-				var article = context.Articles.FirstOrDefault(a => a.Id == articleId);
-				if (article != null)
-				{
-					allWordOccurences.Where(wo => wo.ArticleId == articleId).ToList().ForEach(wo => wo.Article = article);
-				}
-			}
-			var articles = allWordOccurences.Select(wo => wo.Article).Where(a => a != dbArticle && a != null).Distinct().ToList();
-
 			var score = 0.0;
 
-			foreach (var article in articles)
+			foreach (var wordOccurence in allWordOccurences)
 			{
-				var wordOccurencesForCurrentArticle = allWordOccurences.Count(wo => wo.ArticleId == article.Id);
+				var wordOccurencesCount = wordOccurence.TimesOccured;
 
-				var articleTopics = article.GetTopics(context).Select(at => at.Topic);
+				var articleTopics = wordOccurence.Article.GetTopics(context).Select(at => at.Topic).ToList();
 
 				foreach (var topic in articleTopics)
 				{
-					var occurencesCount = allWordOccurences.Where(wo => wo.Article.GetTopics(context).Select(at => at.Topic).Contains(topic)).Count();
-					score = ((double)wordOccurencesForCurrentArticle) / occurencesCount;
+					var occurencesInArticlesWithSameTopic = allWordOccurences.Where(wo => wo.Article.Topics.Select(at => at.Topic).Contains(topic));
+					var occurencesCount = occurencesInArticlesWithSameTopic.Sum(wo => wo.TimesOccured);
+					score = ((double)wordOccurencesCount) / occurencesCount;
 					ranklist.AddScore((ClassificationTopics)topic, score);
 				}
 			}

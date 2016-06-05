@@ -23,34 +23,49 @@ namespace TopicClassificationAI.UserControls
 		{
 			get
 			{
-				return mainProgress.IsActive;
+				return progressBar.Visibility == Visibility.Visible;
 			}
 			set
 			{
-				mainProgress.IsActive = value;
-				progressText.Visibility = value ? Visibility.Visible : Visibility.Collapsed;
+				progressBar.Visibility = value ? Visibility.Visible : Visibility.Collapsed;
+				progressTextBlock.Visibility = value ? Visibility.Visible : Visibility.Collapsed;
 				if (!value)
 				{
-					ProgressText = string.Empty;
+					progressTextBlock.Text = string.Empty;
+					progressBar.Value = progressBar.Minimum;
 				}
 			}
 		}
 
+		private string _progressText = string.Empty;
 		public string ProgressText
 		{
 			get
 			{
-				return progressText.Text;
+				if (!string.IsNullOrEmpty(_progressText))
+				{
+					return _progressText;
+				}
+
+				return progressTextBlock.Text;
 			}
 			set
 			{
-				progressText.Text = value;
+				_progressText = value;
 			}
 		}
 
 		public TextProgressUserControl()
 		{
 			this.InitializeComponent();
+		}
+
+		public void UpdateProgress(double value)
+		{
+			progressBar.Value = value;
+
+			var intValue = Convert.ToInt32(value);
+			progressTextBlock.Text = $"{ProgressText} ({intValue}%)";
 		}
 	}
 }

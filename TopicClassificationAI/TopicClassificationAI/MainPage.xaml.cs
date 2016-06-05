@@ -63,6 +63,7 @@ namespace TopicClassificationAI
 		private async void submitArticle_Click(object sender, RoutedEventArgs e)
 		{
 			topicsMatches.Text = string.Empty;
+			topicsMatchesHeader.Visibility = Visibility.Collapsed;
 
 			var articleText = articleBox.Text;
 
@@ -71,13 +72,14 @@ namespace TopicClassificationAI
 				throw new TopicValidationException("Please enter text for the article");
 			}
 
-			progressBar.Visibility = Visibility.Visible;
-			progressTextBlock.Visibility = Visibility.Visible;
+			textProgress.IsActive = true;
 
 			articleBox.IsEnabled = false;
 			submitArticle.IsEnabled = false;
+			submitArticle.Visibility = Visibility.Collapsed;
+			learnTopics.IsEnabled = false;
 
-			var progress = new Progress<double>(percent => progressBar.Value = percent);
+			var progress = new Progress<double>(percent => textProgress.UpdateProgress(percent));
 
 			var parser = new ArticleParser();
 			await Task.Delay(100);
@@ -89,11 +91,12 @@ namespace TopicClassificationAI
 			}
 
 			topicsMatchesHeader.Visibility = Visibility.Visible;
-			progressBar.Visibility = Visibility.Collapsed;
-			progressTextBlock.Visibility = Visibility.Collapsed;
+			textProgress.IsActive = false;
 
 			submitArticle.IsEnabled = true;
+			submitArticle.Visibility = Visibility.Visible;
 			articleBox.IsEnabled = true;
+			learnTopics.IsEnabled = true;
 		}
 
 		private void learnTopics_Click(object sender, RoutedEventArgs e)

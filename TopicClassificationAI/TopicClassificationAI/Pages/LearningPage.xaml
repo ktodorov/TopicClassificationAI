@@ -8,7 +8,8 @@
 	xmlns:uc="using:TopicClassificationAI.UserControls"
     mc:Ignorable="d">
 
-	<ScrollViewer VerticalScrollBarVisibility="Auto" VerticalAlignment="Stretch">
+	<ScrollViewer VerticalScrollBarVisibility="Auto" VerticalAlignment="Stretch"
+				  Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
 		<StackPanel Orientation="Vertical" Margin="10" VerticalAlignment="Center">
 			<StackPanel.ChildrenTransitions>
 				<TransitionCollection>
@@ -16,20 +17,19 @@
 				</TransitionCollection>
 			</StackPanel.ChildrenTransitions>
 
-			<TextBlock Text="Enter the article here" Margin="50, 5"/>
+			<TextBlock Text="Enter the article here" Margin="50, 5"
+					   Foreground="{ThemeResource SystemControlForegroundBaseHighBrush}"/>
 
 			<TextBox Name="articleBox" HorizontalAlignment="Stretch" Margin="10, 0"
 				 MinHeight="100" TextWrapping="Wrap"/>
 
 			<ListView Name="topicsListView" HorizontalAlignment="Center" MinWidth="200" Margin="0, 15"
-				  ItemsSource="{x:Bind learningTopics}" SelectionMode="Multiple">
+				  ItemsSource="{x:Bind learningTopics}" SelectionMode="Multiple"
+					   Foreground="{ThemeResource SystemControlForegroundBaseHighBrush}">
 			</ListView>
 
-			<ProgressBar Name="progressBar" Minimum="0" Maximum="100" HorizontalAlignment="Stretch" Visibility="Collapsed" 
-						 Margin="0, 15, 0, 5" />
-
-			<TextBlock Name="progressTextBlock" Text="Learning..." Margin="0, 0, 0, 20" HorizontalAlignment="Center" TextAlignment="Center"
-					   Visibility="Collapsed"/>
+			<uc:TextProgressUserControl x:Name="textProgress" ProgressText="Learning..." IsActive="False"
+										HorizontalAlignment="Stretch"/>
 
 			<Button Name="learnButton" Content="Learn article" Click="learnButton_Click" HorizontalAlignment="Center"
 					Width="150" Margin="0, 10"

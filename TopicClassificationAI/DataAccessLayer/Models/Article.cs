@@ -11,14 +11,22 @@ namespace DataAccessLayer.Models
 	{
 		public string Text { get; set; }
 
+		public List<ArticleTopic> Topics { get; set; }
+
 		public override string ToString()
 		{
 			return $"{Text.Substring(0, 30)}";
 		}
 
-		public List<ArticleTopic> GetTopics(TopicClassificationContext context)
+		public IQueryable<ArticleTopic> GetTopics(TopicClassificationContext context)
 		{
-			var topics = context.ArticleTopics.Where(at => at.ArticleId == this.Id).ToList();
+			var topics = context.ArticleTopics.Where(at => at.ArticleId == this.Id);
+			return topics;
+		}
+
+		public List<ArticleTopic> GetTopics(List<ArticleTopic> articleTopics)
+		{
+			var topics = articleTopics.Where(at => at.ArticleId == this.Id).ToList();
 			return topics;
 		}
 	}
