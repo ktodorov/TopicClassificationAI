@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using TopicClassificationAI.Pages;
 using TopicClassificationCore.Exceptions;
 using TopicClassificationCore.Extensions;
+using TopicClassificationCore.Helpers;
 using TopicClassificationCore.Parsers;
 using Windows.ApplicationModel.Core;
 using Windows.Foundation;
@@ -70,6 +71,19 @@ namespace TopicClassificationAI
 			if (string.IsNullOrEmpty(articleText))
 			{
 				throw new TopicValidationException("Please enter text for the article");
+			}
+
+			using (var context = new TopicClassificationContext())
+			{
+				var enumValues = Enum.GetValues(typeof(ClassificationTopics));
+
+				foreach (var enumValue in enumValues)
+				{
+					if (!context.ArticleTopics.Any(at => at.Topic == (int)((ClassificationTopics)enumValue)))
+					{
+						throw new TopicValidationException($"You must enter at least one article of '{((ClassificationTopics)enumValue).ToString().SeparateCamelCase()}' topic in order to start calculating");
+					}
+				}
 			}
 
 			textProgress.IsActive = true;

@@ -116,9 +116,6 @@
     <Compile Include="Parsers\ArticleParser.cs" />
     <Compile Include="Parsers\BaseParser.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Topics\BaseTopic.cs" />
-    <Compile Include="Topics\PoliticsTopic.cs" />
-    <Compile Include="Topics\SportsTopic.cs" />
     <EmbeddedResource Include="Properties\TopicClassificationCore.rd.xml" />
   </ItemGroup>
   <ItemGroup>

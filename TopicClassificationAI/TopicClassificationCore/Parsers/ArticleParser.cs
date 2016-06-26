@@ -6,7 +6,6 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using TopicClassificationCore.Helpers;
-using TopicClassificationCore.Topics;
 
 namespace TopicClassificationCore.Parsers
 {
